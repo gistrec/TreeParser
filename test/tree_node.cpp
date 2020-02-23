@@ -1,4 +1,6 @@
-#include "pch.h"
+#include "gtest/gtest.h"
+
+#include "tree/tree_serialization.hpp"
 
 
 TEST(tree_node, IntegerNode) {

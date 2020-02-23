@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include <tree/tree_node.hpp>
-#include <tree/tree_serialization.hpp>
+#include "tree/tree_serialization.hpp"
 
 
 int main(int argc, char* argv[]) {

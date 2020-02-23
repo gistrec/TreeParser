@@ -22,11 +22,11 @@ public:
 
 	StorageType virtual getStorageType() const = 0;
 
-	const ChildrenType& getChildren() const {
+	inline const ChildrenType& getChildren() const {
 		return _children;
 	}
 
-    void addChild(const NodePtr& child) {
+    inline void addChild(const NodePtr& child) {
         _children.push_back(child);
     }
 
@@ -38,17 +38,17 @@ class StringNode : public Node {
 public:
 	using Node::getChildren;
 
-	explicit StringNode(const std::string& value) : _value(value) {};
+	inline explicit StringNode(const std::string& value) : _value(value) {};
 
-	StorageType getStorageType() const override {
+	inline StorageType getStorageType() const override {
 		return StorageType::String;
 	}
 
-	std::string& getStoredValue() {
+	inline std::string& getStoredValue() {
 		return _value;
 	}
 
-	~StringNode() {}
+	inline ~StringNode() {}
 
 private:
 	std::string _value;
@@ -58,17 +58,17 @@ class DoubleNode : public Node {
 public:
 	using Node::getChildren;
 
-    explicit DoubleNode(double value) : _value(value) {};
+    inline explicit DoubleNode(double value) : _value(value) {};
 
-	StorageType getStorageType() const override {
+	inline StorageType getStorageType() const override {
 		return StorageType::Double;
 	}
 
-	double& getStoredValue() {
+	inline double& getStoredValue() {
 		return _value;
 	}
 
-	~DoubleNode() {}
+	inline ~DoubleNode() {}
 
 private:
 	double _value;
@@ -78,17 +78,17 @@ class IntegerNode : public Node {
 public:
 	using Node::getChildren;
 
-    explicit IntegerNode(int value) : _value(value) {};
+    inline explicit IntegerNode(int value) : _value(value) {};
 
-	StorageType getStorageType() const override {
+	inline StorageType getStorageType() const override {
 		return StorageType::Integer;
 	}
 
-	int& getStoredValue() {
+	inline int& getStoredValue() {
 		return _value;
 	}
 
-	~IntegerNode() {}
+	inline ~IntegerNode() {}
 
 private:
 	int _value;
