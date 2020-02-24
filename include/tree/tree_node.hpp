@@ -9,89 +9,85 @@
 namespace tree {
 
 enum class StorageType {
-	String,
-	Double,
-	Integer,
+    String,
+    Double,
+    Integer,
     None
 };
 
 class Node {
 public:
-	using NodePtr      = std::shared_ptr<Node>;
-	using ChildrenType = std::vector<NodePtr>;
+    using NodePtr      = std::shared_ptr<Node>;
+    using ChildrenType = std::vector<NodePtr>;
 
-	StorageType virtual getStorageType() const = 0;
+    StorageType virtual getStorageType() const = 0;
 
-	inline const ChildrenType& getChildren() const {
-		return _children;
-	}
+    const ChildrenType& getChildren() const {
+        return _children;
+    }
 
-    inline void addChild(const NodePtr& child) {
+    void addChild(const NodePtr& child) {
         _children.push_back(child);
     }
 
+    virtual ~Node() = default;
+
 private:
-	ChildrenType _children;
+    ChildrenType _children;
 };
 
 class StringNode : public Node {
 public:
-	using Node::getChildren;
+    using Node::getChildren;
 
-	inline explicit StringNode(const std::string& value) : _value(value) {};
+    explicit StringNode(const std::string& value) : _value(value) {};
 
-	inline StorageType getStorageType() const override {
-		return StorageType::String;
-	}
+    StorageType getStorageType() const override {
+        return StorageType::String;
+    }
 
-	inline std::string& getStoredValue() {
-		return _value;
-	}
-
-	inline ~StringNode() {}
+    std::string& getStoredValue() {
+        return _value;
+    }
 
 private:
-	std::string _value;
+    std::string _value;
 };
 
 class DoubleNode : public Node {
 public:
-	using Node::getChildren;
+    using Node::getChildren;
 
-    inline explicit DoubleNode(double value) : _value(value) {};
+    explicit DoubleNode(double value) : _value(value) {};
 
-	inline StorageType getStorageType() const override {
-		return StorageType::Double;
-	}
+    StorageType getStorageType() const override {
+        return StorageType::Double;
+    }
 
-	inline double& getStoredValue() {
-		return _value;
-	}
-
-	inline ~DoubleNode() {}
+    double& getStoredValue() {
+        return _value;
+    }
 
 private:
-	double _value;
+    double _value;
 };
 
 class IntegerNode : public Node {
 public:
-	using Node::getChildren;
+    using Node::getChildren;
 
-    inline explicit IntegerNode(int value) : _value(value) {};
+    explicit IntegerNode(int value) : _value(value) {};
 
-	inline StorageType getStorageType() const override {
-		return StorageType::Integer;
-	}
+    StorageType getStorageType() const override {
+        return StorageType::Integer;
+    }
 
-	inline int& getStoredValue() {
-		return _value;
-	}
-
-	inline ~IntegerNode() {}
+    int& getStoredValue() {
+        return _value;
+    }
 
 private:
-	int _value;
+    int _value;
 };
 } // namespace tree
 

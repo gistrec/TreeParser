@@ -8,12 +8,6 @@
 
 
 namespace tree {
-//! @brief Getting the number of tabs in a string
-//!
-//! @param str                 The string to tabs counting
-//! @return                    Number of tabs
-size_t getTabCount(const std::string& str);
-
 //! @brief Creating a node for value in line
 //!
 //! @param[in] line            String with value

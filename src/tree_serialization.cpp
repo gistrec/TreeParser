@@ -1,21 +1,10 @@
 #include "tree/tree_serialization.hpp"
 
-#include <stack>    // std::stack
+#include <stack>     // std::stack
+#include <algorithm> // std::count
 
 
 namespace tree {
-//! @brief Getting the number of tabs in a string
-//!
-//! @param str                 The string to tabs counting
-//! @return                    Number of tabs
-size_t getTabCount(const std::string& str) {
-	size_t index = 0U;
-
-    for (; index < str.size() && str[index] == /* TAB */ 0x09; ++index) {}
-
-	return index;
-}
-
 //! @brief Creating a node for value in line
 //!
 //! @param[in] line            String with value
@@ -91,31 +80,32 @@ void print(const std::shared_ptr<Node>& tree, std::ostream& stream) {
 //! @throw file_error          In case of error reading from the file
 //! @throw parse_error         In case of error deserializing the tree
 void read(const std::string& filename, std::shared_ptr<Node>& tree) {
-	std::ifstream file(filename, std::ifstream::in);
+    std::ifstream file(filename, std::ifstream::in);
 
-	if (!file.is_open()) {
-		throw std::runtime_error("file_error: Cant't open input file " + filename);
-	}
+    if (!file.is_open()) {
+        throw std::runtime_error("file_error: Cant't open input file " + filename);
+    }
 
-	// Количество табов перед строкой - уровень дерева
-	std::stack<std::shared_ptr<Node>> parents;
-	size_t level = 0U;
+    std::stack<std::shared_ptr<Node>> parents;
+    size_t level = 0U;
 
-	// Обрабатываем корень дерева
-	// Т.к. в неё может быть только один элемент
-	std::string line;
-	std::getline(file, line);
+    // Process the root of the tree
+    // The tree should have only one root
+    std::string line;
+    std::getline(file, line);
 
-	if (getTabCount(line) != 0U) {
-		throw std::runtime_error("parse_error");
-	}
+    // The number of tabs is equal to the node level
+    auto tabCount = std::count(std::begin(line), std::end(line), /* TAB*/ 0x09);
+    if (tabCount != 0U) {
+        throw std::runtime_error("parse_error");
+    }
 
     tree = createNode(line);
     parents.push(tree);
 
 
-	while (std::getline(file, line)) {
-        size_t new_level = getTabCount(line);
+    while (std::getline(file, line)) {
+        size_t new_level = std::count(std::begin(line), std::end(line), /* TAB*/ 0x09);
 
         if (new_level == 0U || new_level > parents.size()) {
             throw std::runtime_error("parse_error");
@@ -131,7 +121,7 @@ void read(const std::string& filename, std::shared_ptr<Node>& tree) {
         parents.top()->addChild(node);
         parents.push(node);
         level = new_level;
-	}
+    }
 }
 
 //! @brief Write tree to the given file
@@ -144,7 +134,6 @@ void write(const std::string& filename, const std::shared_ptr<Node>& tree) {
     std::ofstream file(filename, std::ofstream::out | std::ofstream::trunc);
 
     if (!file.is_open()) {
-        std::cout << "Lol";
         throw std::runtime_error("file_error");
     }
 

@@ -15,7 +15,7 @@ namespace tree {
 //! @param[out] result         Parsed value
 //! @return                    Type of parsed value
 StorageType parseString(const std::string& str, std::variant<int, double, std::string>& result) {
-	const auto start = str.find_first_not_of(/* TAB */ 0x09);
+    const auto start = str.find_first_not_of(/* TAB */ 0x09);
 
     #if __cpp_lib_to_chars >= 201611
         // Integer
