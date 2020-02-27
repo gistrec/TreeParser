@@ -10,7 +10,7 @@ namespace tree {
 //! @param[in] line            String with value
 //! @return                    One of nodes: IntegerNode, DoubleNode, StringNode
 //!
-//! @throw parse_error         In case of line contains an invalid value
+//! @throw TreeBadData         In case of line contains an invalid value
 std::shared_ptr<Node> createNode(const std::string& line) {
     std::variant<int, double, std::string> value;
 
@@ -27,7 +27,7 @@ std::shared_ptr<Node> createNode(const std::string& line) {
             return std::make_shared<StringNode>(std::get<std::string>(value));
 
         default:
-            throw std::runtime_error("parse_error");
+            throw TreeBadData("Incorrect value: '" + line + "'");
     }
 }
 
@@ -84,13 +84,13 @@ void print(const std::shared_ptr<Node>& tree, std::ostream& stream) {
 //! @param[in]  filename       Name of file from which to read in the tree
 //! @param[out] tree           The tree to populate
 //!
-//! @throw file_error          In case of error reading from the file
-//! @throw parse_error         In case of error deserializing the tree
+//! @throw TreeBadFile         In case of error reading from the file
+//! @throw TreeBadData         Or in case of error deserializing the tree
 void read(const std::string& filename, std::shared_ptr<Node>& tree) {
     std::ifstream file(filename, std::ifstream::in);
 
     if (!file.is_open()) {
-        throw std::runtime_error("file_error: Cant't open input file " + filename);
+        throw TreeBadFile("Cant't open input file: " + filename);
     }
 
     std::stack<std::shared_ptr<Node>> parents;
@@ -104,18 +104,20 @@ void read(const std::string& filename, std::shared_ptr<Node>& tree) {
     // The number of tabs is equal to the node level
     auto tabCount = std::count(std::begin(line), std::end(line), /* TAB*/ 0x09);
     if (tabCount != 0U) {
-        throw std::runtime_error("parse_error");
+        throw TreeBadData("Incorrect root of tree");
     }
 
     tree = createNode(line);
     parents.push(tree);
 
-
+    size_t lineIndex = 0U;
     while (std::getline(file, line)) {
+        lineIndex++;
+
         size_t new_level = std::count(std::begin(line), std::end(line), /* TAB*/ 0x09);
 
         if (new_level == 0U || new_level > parents.size()) {
-            throw std::runtime_error("parse_error");
+            throw TreeBadData("Incorrect node level on line: " + std::to_string(lineIndex));
         }
 
         auto node = createNode(line);
@@ -133,15 +135,15 @@ void read(const std::string& filename, std::shared_ptr<Node>& tree) {
 
 //! @brief Write tree to the given file
 //!
-//! @param[in] filename      The name of the file to which to write tree
-//! @param[in] tree          The tree to output
+//! @param[in] filename        The name of the file to which to write tree
+//! @param[in] tree            The tree to output
 //!
-//! @throw file_error        In case of error writing to the file
+//! @throw TreeBadFile         In case of error writing to the file
 void write(const std::string& filename, const std::shared_ptr<Node>& tree) {
     std::ofstream file(filename, std::ofstream::out | std::ofstream::trunc);
 
     if (!file.is_open()) {
-        throw std::runtime_error("file_error");
+        throw TreeBadFile("Cant't open output file: " + filename);
     }
 
     print(tree, file);

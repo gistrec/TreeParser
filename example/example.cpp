@@ -43,9 +43,12 @@ int main(int argc, char* argv[]) {
         tree::print(tree);
         tree::write(output, tree);
 
-    } catch (const std::runtime_error &error) {
+    } catch (const tree::TreeBadData &error) {
         std::cerr << error.what() << std::endl;
         return 2;
+    } catch (const tree::TreeBadFile &error) {
+        std::cerr << error.what() << std::endl;
+        return 3;
     }
 
     return 0;

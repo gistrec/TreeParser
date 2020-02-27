@@ -22,6 +22,7 @@ test: lib
 		-I$(PROJECT)/include  -L$(PROJECT)/_build   \
 		$(PROJECT)/test/string_parser.cpp           \
 		$(PROJECT)/test/tree_node.cpp               \
+		$(PROJECT)/test/exceptions.cpp              \
 		$(PROJECT)/test/tree_serialization.cpp      \
 		-o $(PROJECT)/test.exe
 

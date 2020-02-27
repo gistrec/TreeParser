@@ -1,10 +1,11 @@
-#ifndef TREE_READER
-#define TREE_READER
+#ifndef TREE_SERIALIZATION
+#define TREE_SERIALIZATION
 
 #include <fstream>  // std::ofstream
 #include <iostream> // std::cout
 
 #include "string_parser.hpp"
+#include "exceptions.hpp"
 
 
 namespace tree {
@@ -13,7 +14,7 @@ namespace tree {
 //! @param[in] line            String with value
 //! @return                    One of nodes: IntegerNode, DoubleNode, StringNode
 //!
-//! @throw parse_error         In case of line contains an invalid value
+//! @throw TreeBadData         In case of line contains an invalid value
 std::shared_ptr<Node> createNode(const std::string& line);
 
 //! @brief Print tree to given stream
@@ -27,8 +28,8 @@ void print(const std::shared_ptr<Node>& tree, std::ostream& stream = std::cout);
 //! @param[in]  filename       Name of file from which to read in the tree
 //! @param[out] tree           The tree to populate
 //!
-//! @throw file_error          In case of error reading from the file
-//! @throw parse_error         In case of error deserializing the tree
+//! @throw TreeBadFile         In case of error reading from the file
+//! @throw TreeBadData         In case of error deserializing the tree
 void read(const std::string& filename, std::shared_ptr<Node>& tree);
 
 //! @brief Write tree to the given file
@@ -36,8 +37,8 @@ void read(const std::string& filename, std::shared_ptr<Node>& tree);
 //! @param[in] filename      The name of the file to which to write tree
 //! @param[in] tree          The tree to output
 //!
-//! @throw file_error        In case of error writing to the file
+//! @throw TreeBadFile       In case of error writing to the file
 void write(const std::string& filename, const std::shared_ptr<Node>& tree);
 } // namespace tree
 
-#endif // TREE_READER
+#endif // TREE_SERIALIZATION
