@@ -3,8 +3,8 @@
 TreeParser - библиотека, предоставляющая функционал для работы с деревом.
 
 <p align="left">
-    <a href="https://circleci.com/gh/gistrec/TreeParser/tree/master">
-        <img src="https://img.shields.io/circleci/build/github/gistrec/TreeParser/master" alt="Build status">
+    <a href="https://circleci.com/gh/gistrec/TreeParser/tree/develop">
+        <img src="https://img.shields.io/circleci/build/github/gistrec/TreeParser/develop" alt="Build status">
     </a>
 </p>
 
