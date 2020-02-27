@@ -1,4 +1,4 @@
-﻿#ifndef TREE_READER
+#ifndef TREE_READER
 #define TREE_READER
 
 #include <fstream>  // std::ofstream

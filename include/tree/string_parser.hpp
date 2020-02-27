@@ -1,4 +1,4 @@
-﻿#ifndef TREE_STRING_PARSER
+#ifndef TREE_STRING_PARSER
 #define TREE_STRING_PARSER
 
 #include <variant>  // std::variant since C++17
