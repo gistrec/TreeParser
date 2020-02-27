@@ -2,6 +2,12 @@
 
 TreeParser - библиотека, предоставляющая функционал для работы с деревом.
 
+<p align="left">
+    <a href="https://circleci.com/gh/gistrec/TreeParser/tree/master">
+        <img src="https://img.shields.io/circleci/build/github/gistrec/TreeParser/master" alt="Build status">
+    </a>
+</p>
+
 ## Структура проекта
 * `example` - демонстрационная программа
 * `include` - заголовочные файлы библиотеки
@@ -14,8 +20,8 @@ TreeParser - библиотека, предоставляющая функцио
 
 ## Пример конфига
 
-Для хранения дерева в файле был разработан специальный формат ([пример файла](https://github.com/gistrec/TreeParser/blob/develop/example/input.txt)).  
-Дочерние узлы  имеют отступ в 1 знак табуляции  
+Для хранения дерева в файле был разработан специальный формат ([пример файла](https://github.com/gistrec/TreeParser/blob/develop/example/input.txt)).
+Дочерние узлы  имеют отступ в 1 знак табуляции
 
 Таким образом дерево
 ![](https://gistrec.ru/wp-content/uploads/2020/02/TreeParse.png "Пример дерева")
