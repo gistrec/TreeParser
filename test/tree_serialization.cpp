@@ -4,10 +4,21 @@
 
 #include "tree/tree_serialization.hpp"
 
+/****
+## Purpose
+Verify correctness of the `tree::read` and `tree::write` function
 
+## Input
+    * `input`    Name of file from which to read in the tree
+    * `output`   The name of the file to which to write tree
+    * `tree`     The tree
+
+## Expected result
+    * `input` file is equal to `output` file
+****/
 TEST(tree_serialization, serialization) {
-    /*std::string input  = "input.txt";
-    std::string output = "output.txt";
+    std::string input  = "test/input.txt";
+    std::string output = "test/output.txt";
 
     std::shared_ptr<tree::Node> tree;
 
@@ -22,5 +33,5 @@ TEST(tree_serialization, serialization) {
 
     EXPECT_TRUE(std::equal(std::istreambuf_iterator<char>(in.rdbuf()),
                            std::istreambuf_iterator<char>(),
-                           std::istreambuf_iterator<char>(out.rdbuf())));*/
+                           std::istreambuf_iterator<char>(out.rdbuf())));
 }
