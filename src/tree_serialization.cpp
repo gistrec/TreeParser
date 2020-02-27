@@ -40,6 +40,10 @@ void print(const std::shared_ptr<Node>& tree, std::ostream& stream) {
     using NodeLevel = std::size_t;
     using NodeData  = std::pair<NodePtr, NodeLevel>; // Save level of node
 
+    // Save stream locale to print floating point values with comma
+    auto locale = stream.getloc();
+    stream.imbue(std::locale("C"));
+
     std::stack<NodeData> parents;
     parents.push({ tree, 0U });
 
@@ -60,7 +64,7 @@ void print(const std::shared_ptr<Node>& tree, std::ostream& stream) {
                 break;
 
             case StorageType::String:
-                stream << static_cast<StringNode*>(node.get())->getStoredValue() << std::endl;
+                stream << '"' << static_cast<StringNode*>(node.get())->getStoredValue() << '"' << std::endl;
                 break;
         }
 
@@ -70,6 +74,9 @@ void print(const std::shared_ptr<Node>& tree, std::ostream& stream) {
             parents.push({*it, level + 1U});
         }
     }
+
+    // Restore stream locale
+    stream.imbue(locale);
 }
 
 //! @brief Read tree from the given file

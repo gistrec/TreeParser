@@ -1,11 +1,6 @@
 #include "tree/string_parser.hpp"
 
-// GCC has partial support charconv - only integral types supported from GCC 8.1
-#if __cpp_lib_to_chars >= 201611
-#include <charconv>
-#else
-#include <cstdlib>  // std::strtod
-#endif
+#include <sstream> // std::istringstream
 
 
 namespace tree {
@@ -17,25 +12,26 @@ namespace tree {
 StorageType parseString(const std::string& str, std::variant<int, double, std::string>& result) {
     const auto start = str.find_first_not_of(/* TAB */ 0x09);
 
-    #if __cpp_lib_to_chars >= 201611
+    // Different locales have different comma for floating point values
+    // This program can't risk any impact on other parts of the system and changing global locale for sure can affect other processes
+    // So we need to convert string to istringstream and set locale only for
+    std::istringstream istr(str);
+    istr.imbue(std::locale("C"));
+    istr.exceptions(std::ios::failbit);
+
+    try {
         // Integer
-        if (str.find_first_not_of("-0123456789", start) == std::string::npos) {
+        if (str.find_first_not_of("-+0123456789", start) == std::string::npos) {
             int value;
-
-            auto [p, ec] = std::from_chars(str.data() + start, str.data() + str.size(), value);
-            if (ec != std::errc()) return StorageType::None;
-
+            istr >> value;
             result = value;
             return StorageType::Integer;
         }
 
         // Double
-        if (str.find_first_not_of(".,-0123456789", start) == std::string::npos) {
+        if (str.find_first_not_of(".-+0123456789", start) == std::string::npos) {
             double value;
-
-            auto [p, ec] = std::from_chars(str.data() + start, str.data() + str.size(), value);
-            if (ec != std::errc()) return StorageType::None;
-
+            istr >> value;
             result = value;
             return StorageType::Double;
         }
@@ -46,32 +42,8 @@ StorageType parseString(const std::string& str, std::variant<int, double, std::s
 
             return StorageType::String;
         }
+    } catch (/* ios::exceptions */...) {}
 
-        // Nothing
-        return StorageType::None;
-    #else
-        try {
-            // Integer
-            if (str.find_first_not_of("-0123456789", start) == std::string::npos) {
-                result = std::stoi(str.data() + start);
-                return StorageType::Integer;
-            }
-
-            // Double
-            if (str.find_first_not_of(".,-0123456789", start) == std::string::npos) {
-                result = std::stod(str.data() + start);
-                return StorageType::Double;
-            }
-
-            // String
-            if (str[start] == '"' && str[str.size() - 1U] == '"') {
-                result = str.substr(start + 1U, str.size() - 2U - start);
-
-                return StorageType::String;
-            }
-        } catch (/* std::out_of_range or std::invalid_argument */...) {}
-
-        return StorageType::None;
-    #endif
+    return StorageType::None;
 }
 } // namespace tree
